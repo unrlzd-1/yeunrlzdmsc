@@ -10,30 +10,24 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/index.html"
+      "source": "/",
+      "destination": "/index.html"
     },
     {
-      "src": "/upload",
-      "dest": "/upload.html"
+      "source": "/upload",
+      "destination": "/upload.html"
     },
     {
-      "src": "/(.*\\.(mp3|wav|ogg))",
+      "source": "/(.*\\.(mp3|wav|ogg))",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
     {
-      "src": "/.*",
-      "dest": "/index.html"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/upload",
-      "destination": "/upload.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
