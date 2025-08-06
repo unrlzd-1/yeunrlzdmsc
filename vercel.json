@@ -10,6 +10,21 @@
       "use": "@vercel/static"
     }
   ],
+  "headers": [
+    {
+      "source": "/(.*\\.(mp3|wav|ogg))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
@@ -18,12 +33,6 @@
     {
       "source": "/upload",
       "destination": "/upload.html"
-    },
-    {
-      "source": "/(.*\\.(mp3|wav|ogg))",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
     },
     {
       "source": "/(.*)",
