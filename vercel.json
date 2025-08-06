@@ -1,42 +1,42 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "**/*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "**/*.js",
-      "use": "@vercel/static"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*\\.(mp3|wav|ogg))",
-      "headers": [
+    "version": 2,
+    "builds": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
+            "src": "**/*.html",
+            "use": "@vercel/static"
         },
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
+            "src": "**/*.js",
+            "use": "@vercel/static"
         }
-      ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/upload",
-      "destination": "/upload.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+    ],
+    "headers": [
+        {
+            "source": "/songs/.+\\.(mp3|wav|ogg)$",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=31536000, immutable"
+                },
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                }
+            ]
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/",
+            "destination": "/index.html"
+        },
+        {
+            "source": "/upload",
+            "destination": "/upload.html"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
+        }
+    ]
 }
