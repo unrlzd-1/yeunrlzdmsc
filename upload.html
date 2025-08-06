@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Music | WaveStream</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Upload-specific styles */
+        .upload-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--gray);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .upload-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .upload-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .dropzone {
+            border: 2px dashed rgba(138, 43, 226, 0.5);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            position: relative;
+            background: rgba(138, 43, 226, 0.05);
+        }
+
+        .dropzone:hover {
+            border-color: var(--primary);
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        .dropzone.active {
+            border-color: var(--secondary);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .dropzone i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-info {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            align-items: center;
+        }
+
+        .file-info.show {
+            display: flex;
+        }
+
+        .file-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
+            overflow: hidden;
+        }
+
+        .file-thumbnail i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .file-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .file-name i {
+            margin-right: 0.5rem;
+            color: var(--secondary);
+        }
+
+        .file-size {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .remove-file:hover {
+            color: #ff5555;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-upload {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-upload:disabled {
+            background: var(--gray);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-container {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .progress-container.show {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .upload-success {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .upload-success.show {
+            display: block;
+        }
+
+        .upload-success i {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-success h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .upload-success p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-success:hover {
+            background: #00cc6a;
+        }
+
+        @media (max-width: 768px) {
+            .upload-container {
+                padding: 1.5rem;
+            }
+            
+            .file-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .file-thumbnail {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-wave-square"></i>
+                <span>WaveStream</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-compass"></i> Discover</a></li>
+                    <li><a href="#"><i class="fas fa-music"></i> Library</a></li>
+                    <li><a href="#"><i class="fas fa-heart"></i> Favorites</a></li>
+                    <li class="active"><a href="upload.html"><i class="fas fa-upload"></i> Upload</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="content-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="user-menu">
+                    <img src="assets/user-avatar.jpg" alt="User Avatar" class="avatar">
+                    <span>Username</span>
+                </div>
+            </header>
+
+            <div class="upload-container">
+                <!-- Upload Form -->
+                <div class="upload-form" id="uploadForm">
+                    <div class="upload-header">
+                        <h2>Upload Your Music</h2>
+                        <p>Share your sound with the world. Supported formats: MP3, WAV, OGG</p>
+                    </div>
+
+                    <div class="dropzone" id="dropzone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Drag & Drop your audio file here</h3>
+                        <p>or click to browse files</p>
+                        <input type="file" id="fileInput" class="file-input" accept="audio/*">
+                    </div>
+
+                    <div class="file-info" id="fileInfo">
+                        <div class="file-thumbnail">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">
+                                <i class="fas fa-check-circle"></i>
+                                <span id="fileName">No file selected</span>
+                            </div>
+                            <div class="file-size" id="fileSize">0 MB</div>
+                        </div>
+                        <button class="remove-file" id="removeFile">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trackTitle">Track Title</label>
+                        <input type="text" id="trackTitle" class="form-control" placeholder="Enter track title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trackArtist">Artist Name</label>
+                        <input type="text" id="trackArtist" class="form-control" placeholder="Enter artist name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trackDescription">Description (Optional)</label>
+                        <textarea id="trackDescription" class="form-control" placeholder="Tell us about this track..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="trackGenre">Genre</label>
+                        <select id="trackGenre" class="form-control">
+                            <option value="">Select a genre</option>
+                            <option value="pop">Pop</option>
+                            <option value="rock">Rock</option>
+                            <option value="hiphop">Hip Hop</option>
+                            <option value="electronic">Electronic</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="classical">Classical</option>
+                            <option value="rnb">R&B</option>
+                            <option value="lofi">Lo-Fi</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="explicitContent"> Contains explicit content
+                        </label>
+                    </div>
+
+                    <button class="btn-upload" id="btnUpload" disabled>Upload Track</button>
+
+                    <div class="progress-container" id="progressContainer">
+                        <div class="progress-text">
+                            <span>Uploading...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="upload-success" id="uploadSuccess">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Upload Complete!</h3>
+                    <p>Your track has been successfully uploaded to WaveStream.</p>
+                    <button class="btn-success" id="btnNewUpload">Upload Another Track</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFile = document.getElementById('removeFile');
+            const btnUpload = document.getElementById('btnUpload');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadSuccess = document.getElementById('uploadSuccess');
+            const btnNewUpload = document.getElementById('btnNewUpload');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const thumbnail = document.querySelector('.file-thumbnail');
+
+            let selectedFile = null;
+
+            // Drag and Drop Events
+            dropzone.addEventListener('click', () => fileInput.click());
+            
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('active');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('active');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('active');
+                
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            // File Input Change
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleFile(fileInput.files[0]);
+                }
+            });
+
+            // Remove File
+            removeFile.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetFile();
+            });
+
+            // Upload Button
+            btnUpload.addEventListener('click', uploadFile);
+
+            // New Upload Button
+            btnNewUpload.addEventListener('click', resetForm);
+
+            // Handle Selected File
+            function handleFile(file) {
+                // Validate file type
+                const validTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/x-m4a'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please upload a valid audio file (MP3, WAV, or OGG)');
+                    return;
+                }
+
+                // Validate file size (50MB max)
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('File size must be less than 50MB');
+                    return;
+                }
+
+                selectedFile = file;
+                
+                // Update UI
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                fileInfo.classList.add('show');
+                btnUpload.disabled = false;
+
+                // Generate thumbnail (in a real app, you might extract album art)
+                thumbnail.innerHTML = '<i class="fas fa-music"></i>';
+            }
+
+            // Reset File Selection
+            function resetFile() {
+                selectedFile = null;
+                fileInput.value = '';
+                fileInfo.classList.remove('show');
+                btnUpload.disabled = true;
+            }
+
+            // Format File Size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+            }
+
+            // Upload File (simulated)
+            function uploadFile() {
+                if (!selectedFile) return;
+
+                // Get form data
+                const title = document.getElementById('trackTitle').value;
+                const artist = document.getElementById('trackArtist').value;
+                
+                if (!title || !artist) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                // Show progress
+                uploadForm.style.display = 'none';
+                progressContainer.classList.add('show');
+
+                // Simulate upload progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 100) progress = 100;
+                    
+                    progressFill.style.width = `${progress}%`;
+                    progressPercent.textContent = `${Math.round(progress)}%`;
+                    
+                    if (progress === 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressContainer.classList.remove('show');
+                            uploadSuccess.classList.add('show');
+                        }, 500);
+                    }
+                }, 200);
+            }
+
+            // Reset Form
+            function resetForm() {
+                uploadSuccess.classList.remove('show');
+                uploadForm.style.display = 'block';
+                resetFile();
+                document.getElementById('uploadForm').reset();
+            }
+        });
+    </script>
+</body>
+</html>

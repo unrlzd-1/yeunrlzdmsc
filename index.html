@@ -3,15 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Music Website</title>
+    <title>WaveStream | Modern Music Platform</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>My Music Collection</h1>
-    <input type="file" id="upload" accept="audio/*">
-    <button onclick="uploadSong()">Upload Song</button>
-    <div id="playlist"></div>
-    <audio id="player" controls></audio>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-wave-square"></i>
+                <span>WaveStream</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-compass"></i> Discover</a></li>
+                    <li><a href="#"><i class="fas fa-music"></i> Library</a></li>
+                    <li><a href="#"><i class="fas fa-heart"></i> Favorites</a></li>
+                    <li><a href="upload.html"><i class="fas fa-upload"></i> Upload</a></li>
+                </ul>
+            </nav>
+            <div class="playlists">
+                <h3>Your Playlists</h3>
+                <ul>
+                    <li><a href="#"><i class="fas fa-list-music"></i> Chill Vibes</a></li>
+                    <li><a href="#"><i class="fas fa-list-music"></i> Workout Mix</a></li>
+                    <li><a href="#"><i class="fas fa-list-music"></i> Study Focus</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header class="content-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for songs, artists, or albums...">
+                </div>
+                <div class="user-menu">
+                    <img src="assets/user-avatar.jpg" alt="User Avatar" class="avatar">
+                    <span>Username</span>
+                </div>
+            </header>
+
+            <section class="featured-section">
+                <h2>Recently Played</h2>
+                <div class="track-grid" id="recentTracks"></div>
+            </section>
+
+            <section class="featured-section">
+                <h2>Recommended For You</h2>
+                <div class="track-grid" id="recommendedTracks"></div>
+            </section>
+
+            <section class="now-playing" id="nowPlaying">
+                <div class="track-info">
+                    <img src="assets/placeholder-artwork.jpg" alt="Album Art" class="album-art">
+                    <div class="track-details">
+                        <h3 class="track-title">No track selected</h3>
+                        <p class="track-artist">Select a track to play</p>
+                    </div>
+                    <button class="btn-like"><i class="far fa-heart"></i></button>
+                </div>
+                <div class="player-controls">
+                    <button class="btn-control" id="btnShuffle"><i class="fas fa-random"></i></button>
+                    <button class="btn-control" id="btnPrev"><i class="fas fa-step-backward"></i></button>
+                    <button class="btn-play" id="btnPlay"><i class="fas fa-play"></i></button>
+                    <button class="btn-control" id="btnNext"><i class="fas fa-step-forward"></i></button>
+                    <button class="btn-control" id="btnRepeat"><i class="fas fa-redo"></i></button>
+                    
+                    <div class="progress-container">
+                        <span class="time-current" id="timeCurrent">0:00</span>
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <span class="time-total" id="timeTotal">0:00</span>
+                    </div>
+                </div>
+                <div class="volume-controls">
+                    <i class="fas fa-volume-down"></i>
+                    <div class="volume-bar" id="volumeBar">
+                        <div class="volume-fill" id="volumeFill"></div>
+                    </div>
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/6.6.3/wavesurfer.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
