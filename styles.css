@@ -1,0 +1,14 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+}
+.song {
+    padding: 10px;
+    margin: 5px;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+.song:hover {
+    background: #ddd;
+}
