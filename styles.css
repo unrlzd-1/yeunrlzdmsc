@@ -1,14 +1,320 @@
+/* styles.css - Modern Music Streaming Player */
+:root {
+  --primary: #8a2be2;       /* Purple accent */
+  --secondary: #00ffff;     /* Cyan accent */
+  --dark: #121212;         /* Dark background */
+  --darker: #0a0a0a;       /* Even darker */
+  --light: #e0e0e0;        /* Light text */
+  --gray: #2a2a2a;         /* Gray elements */
+  --success: #00ff7f;      /* Green for uploads */
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 20px;
+  background-color: var(--dark);
+  color: var(--light);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.song {
-    padding: 10px;
-    margin: 5px;
-    background: #f0f0f0;
-    cursor: pointer;
+
+/* Header */
+header {
+  background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.song:hover {
-    background: #ddd;
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: var(--light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+}
+
+nav a:hover {
+  color: var(--secondary);
+  background: rgba(138, 43, 226, 0.1);
+}
+
+/* Main Content */
+main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+/* Player Container */
+.player-container {
+  background: var(--gray);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Waveform */
+#waveform {
+  height: 180px;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Player Controls */
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#playBtn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+  transition: transform 0.2s ease;
+}
+
+#playBtn:hover {
+  transform: scale(1.05);
+}
+
+#progress {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: height 0.2s ease;
+}
+
+#progress:hover {
+  height: 8px;
+}
+
+#progress::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--secondary);
+  cursor: pointer;
+}
+
+.time-display {
+  font-size: 0.9rem;
+  color: var(--light);
+  opacity: 0.8;
+  min-width: 50px;
+  text-align: center;
+}
+
+#volume {
+  width: 100px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+#volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* Track List */
+.track-list {
+  background: var(--gray);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.track-list h2 {
+  margin-bottom: 1.5rem;
+  color: var(--light);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.track:hover {
+  background: rgba(138, 43, 226, 0.1);
+  transform: translateX(5px);
+}
+
+.track:last-child {
+  border-bottom: none;
+}
+
+.track-info {
+  flex: 1;
+  margin-left: 1rem;
+}
+
+.track-title {
+  font-weight: 600;
+  color: var(--light);
+  margin-bottom: 0.2rem;
+}
+
+.track-artist {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.track-duration {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+/* Upload Page */
+.upload-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: var(--gray);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.upload-container h2 {
+  margin-bottom: 1.5rem;
+  color: var(--light);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.upload-form input,
+.upload-form textarea {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--light);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.upload-form input:focus,
+.upload-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.3);
+}
+
+.upload-form button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+  margin-top: 1rem;
+}
+
+.upload-form button:hover {
+  transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  background: var(--darker);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  nav {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .player-controls {
+    gap: 1rem;
+  }
+
+  #progress {
+    min-width: 100%;
+    order: 1;
+  }
 }
